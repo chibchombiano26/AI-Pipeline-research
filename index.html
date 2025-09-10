@@ -54,6 +54,8 @@
       border-radius: 1.5rem; 
       padding: 2.5rem 3rem;
       transition: all 0.3s ease;
+      max-height: 90vh;
+      overflow-y: auto;
     }
     .table {
       width: 100%;
@@ -101,82 +103,35 @@
     .pill { display: inline-block; padding: 0.25rem 0.75rem; border: 1px solid var(--card-border); border-radius: 999px; font-size: 0.8rem; background-color: rgba(88,166,255,0.1); transition: background-color 0.2s ease; }
     .pill:hover { background-color: rgba(88,166,255,0.2); text-decoration: none; }
     
-    /* Pill as a button */
-    button.pill {
-      cursor: pointer;
-      color: var(--fg);
-      font-family: inherit;
-    }
-    button.pill:hover {
-      background-color: rgba(88,166,255,0.2);
-    }
+    button.pill { cursor: pointer; color: var(--fg); font-family: inherit; }
+    button.pill:hover { background-color: rgba(88,166,255,0.2); }
     
     .info-icon {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 1.25rem;
-        height: 1.25rem;
-        border-radius: 999px;
-        border: 1px solid var(--muted);
-        color: var(--muted);
-        font-size: 0.75rem;
-        font-weight: bold;
-        font-style: normal;
-        cursor: help;
-        position: relative;
+        display: inline-flex; align-items: center; justify-content: center;
+        width: 1.25rem; height: 1.25rem; border-radius: 999px;
+        border: 1px solid var(--muted); color: var(--muted); font-size: 0.75rem;
+        font-weight: bold; font-style: normal; cursor: help; position: relative;
     }
     .info-icon:hover::after {
-        content: attr(data-tooltip);
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        bottom: 140%;
-        min-width: 300px;
-        max-width: 400px;
-        background-color: var(--tooltip-bg);
-        color: var(--fg);
-        padding: 0.75rem;
-        border-radius: 0.5rem;
-        border: 1px solid var(--card-border);
-        font-size: 0.875rem;
-        font-weight: normal;
-        line-height: 1.5;
-        text-align: left;
-        white-space: normal;
-        z-index: 20;
-        box-shadow: 0 4px 12px var(--shadow);
-        pointer-events: none;
-        opacity: 1;
+        content: attr(data-tooltip); position: absolute; left: 50%;
+        transform: translateX(-50%); bottom: 140%; min-width: 300px;
+        max-width: 400px; background-color: var(--tooltip-bg); color: var(--fg);
+        padding: 0.75rem; border-radius: 0.5rem; border: 1px solid var(--card-border);
+        font-size: 0.875rem; font-weight: normal; line-height: 1.5; text-align: left;
+        white-space: normal; z-index: 20; box-shadow: 0 4px 12px var(--shadow);
+        pointer-events: none; opacity: 1;
     }
     .toggle-details {
-      background: none;
-      border: 1px solid var(--card-border);
-      color: var(--muted);
-      width: 24px;
-      height: 24px;
-      font-size: 1.2rem;
-      line-height: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      cursor: pointer;
-      transition: transform 0.2s ease, background-color 0.2s ease;
+      background: none; border: 1px solid var(--card-border); color: var(--muted);
+      width: 24px; height: 24px; font-size: 1.2rem; line-height: 1;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 50%; cursor: pointer; transition: transform 0.2s ease, background-color 0.2s ease;
     }
-    .toggle-details:hover {
-        background-color: rgba(255,255,255,0.1);
-    }
-    .toggle-details.expanded {
-        transform: rotate(45deg);
-    }
-    .details-row td {
-      padding: 0;
-      border-bottom: 1px solid var(--card-border);
-    }
+    .toggle-details:hover { background-color: rgba(255,255,255,0.1); }
+    .toggle-details.expanded { transform: rotate(45deg); }
+    .details-row td { padding: 0; border-bottom: 1px solid var(--card-border); }
     .details-content {
-      background-color: var(--details-bg);
-      padding: 1.5rem 1.5rem 1.5rem 2.5rem; /* Extra left padding */
+      background-color: var(--details-bg); padding: 1.5rem;
     }
   </style>
 </head>
@@ -234,7 +189,7 @@
           <h2 class="text-3xl font-bold text-white">2. Comparative Overview</h2>
           <p class="text-gray-400 mt-1">A high-level look at the community editions. Click <span class="font-bold text-sky-400">+</span> for details.</p>
           <div class="overflow-x-auto">
-            <table class="table mt-4 w-full" id="summary-table">
+            <table class="table drilldown-table mt-4 w-full">
               <thead>
                 <tr>
                   <th class="w-12"></th>
@@ -374,34 +329,39 @@
                     <a href="https://docs.langflow.org/api-reference" target="_blank" class="pill">API Docs</a>
                 </div>
             </div>
-            <table class="table">
-                <thead><tr><th>Dimension</th><th>Rating</th><th>Notes</th></tr></thead>
+            <table class="table drilldown-table">
+                <thead><tr><th class="w-12"></th><th>Dimension</th><th>Rating</th><th>Notes</th></tr></thead>
                 <tbody>
-                    <tr>
-                        <td>Auth</td>
-                        <td class="stars">★★☆☆☆</td>
-                        <td class="text-gray-300">No built-in multi-user/RBAC. Suited for single devs or behind a proxy.</td>
+                    <tr class="summary-row">
+                        <td><button class="toggle-details" aria-expanded="false">+</button></td>
+                        <td>Auth</td><td class="stars">★★☆☆☆</td>
+                        <td class="text-gray-300">No built-in RBAC. Requires an external proxy for team use.</td>
                     </tr>
-                    <tr>
-                        <td>Cost</td>
-                        <td class="stars">★★★★★</td>
-                        <td class="text-gray-300">100% free (MIT License). No feature gates. Pay only for infra/API costs.</td>
+                    <tr class="details-row hidden"><td colspan="4"><div class="details-content"><h4 class="font-semibold text-lg text-white">Auth & Governance</h4><p class="text-gray-300 mt-2">The community edition lacks native user management, RBAC, or SSO. Authentication must be handled externally by a proxy (e.g., Nginx, Caddy) or an Identity-Aware Proxy (IAP). This is suitable for single developers but requires significant infrastructure work for secure, multi-user production environments.</p></div></td></tr>
+                    <tr class="summary-row">
+                        <td><button class="toggle-details" aria-expanded="false">+</button></td>
+                        <td>Cost</td><td class="stars">★★★★★</td>
+                        <td class="text-gray-300">100% free (MIT License). No feature gates. Pay only for infra/API.</td>
                     </tr>
-                    <tr>
-                        <td>Performance</td>
-                        <td class="stars">★★★☆☆</td>
-                        <td class="text-gray-300">Python (FastAPI). Good for prototyping but struggles with heavy parallel loads vs. Node.js tools.</td>
+                    <tr class="details-row hidden"><td colspan="4"><div class="details-content"><h4 class="font-semibold text-lg text-white">Cost & Licensing</h4><p class="text-gray-300 mt-2">The permissive MIT license means the software is completely free to use, modify, and distribute, even for commercial purposes. There are no paid tiers or gated features from the developers. All costs are indirect, arising from the cloud infrastructure (compute, databases) and third-party LLM APIs you choose to use.</p></div></td></tr>
+                    <tr class="summary-row">
+                        <td><button class="toggle-details" aria-expanded="false">+</button></td>
+                        <td>Performance</td><td class="stars">★★★☆☆</td>
+                        <td class="text-gray-300">Python-based. Good for prototyping, struggles with heavy parallel loads.</td>
                     </tr>
-                    <tr>
-                        <td>CI/Env Migrations</td>
-                        <td class="stars">★★★★★</td>
-                        <td class="text-gray-300">Full API access. Workflows export as JSON, great for version control.</td>
+                    <tr class="details-row hidden"><td colspan="4"><div class="details-content"><h4 class="font-semibold text-lg text-white">Performance & Scalability</h4><p class="text-gray-300 mt-2">Built on FastAPI (Python), it performs well for I/O-bound tasks and prototyping. However, it can struggle to match the high concurrency of Node.js-based tools under heavy parallel request loads. It can be scaled horizontally by running multiple containers behind a load balancer, but the throughput of each individual container is a limiting factor.</p></div></td></tr>
+                    <tr class="summary-row">
+                        <td><button class="toggle-details" aria-expanded="false">+</button></td>
+                        <td>CI/CD</td><td class="stars">★★★★★</td>
+                        <td class="text-gray-300">Excellent. Full API access and JSON exports enable robust automation.</td>
                     </tr>
-                    <tr>
-                        <td>Local Dev</td>
-                        <td class="stars">★★★★☆</td>
-                        <td class="text-gray-300">Very good. Easy to install via pip or Docker. Full local dev support.</td>
+                    <tr class="details-row hidden"><td colspan="4"><div class="details-content"><h4 class="font-semibold text-lg text-white">CI/CD & Environment Migrations</h4><p class="text-gray-300 mt-2">This is a major strength. Flows can be exported as JSON files, which can be treated as code artifacts. This allows them to be versioned in Git, reviewed, and deployed programmatically via a full-featured API. This makes automated, multi-environment CI/CD pipelines easy to implement.</p></div></td></tr>
+                    <tr class="summary-row">
+                        <td><button class="toggle-details" aria-expanded="false">+</button></td>
+                        <td>Local Dev</td><td class="stars">★★★★☆</td>
+                        <td class="text-gray-300">Very good. Simple setup via `pip` or Docker for a full local experience.</td>
                     </tr>
+                    <tr class="details-row hidden"><td colspan="4"><div class="details-content"><h4 class="font-semibold text-lg text-white">Local Development</h4><p class="text-gray-300 mt-2">The developer experience is excellent. A simple `pip install langflow` is enough to get started, while the provided Docker image ensures a consistent, isolated environment. This strong support for local development enables rapid iteration and testing.</p></div></td></tr>
                 </tbody>
             </table>
         </div>
@@ -423,34 +383,39 @@
                     <a href="https://langchain-ai.github.io/langgraph/reference/overview/" target="_blank" class="pill">API Docs</a>
                 </div>
             </div>
-            <table class="table">
-                <thead><tr><th>Dimension</th><th>Rating</th><th>Notes</th></tr></thead>
+            <table class="table drilldown-table">
+                <thead><tr><th class="w-12"></th><th>Dimension</th><th>Rating</th><th>Notes</th></tr></thead>
                 <tbody>
-                    <tr>
-                        <td>Auth</td>
-                        <td class="stars">☆☆☆☆☆</td>
+                    <tr class="summary-row">
+                        <td><button class="toggle-details" aria-expanded="false">+</button></td>
+                        <td>Auth</td><td class="stars">☆☆☆☆☆</td>
                         <td class="text-gray-300">Not applicable. As a library, auth must be implemented by developers.</td>
                     </tr>
-                    <tr>
-                        <td>Cost</td>
-                        <td class="stars">★★★★★</td>
+                    <tr class="details-row hidden"><td colspan="4"><div class="details-content"><h4 class="font-semibold text-lg text-white">Auth & Governance</h4><p class="text-gray-300 mt-2">LangGraph is a library, not a standalone service. It has no concept of users, roles, or permissions. The application that *uses* LangGraph is entirely responsible for implementing its own security model, including all authentication and authorization logic.</p></div></td></tr>
+                    <tr class="summary-row">
+                        <td><button class="toggle-details" aria-expanded="false">+</button></td>
+                        <td>Cost</td><td class="stars">★★★★★</td>
                         <td class="text-gray-300">MIT License, open-source. Free to use, only infra costs.</td>
                     </tr>
-                    <tr>
-                        <td>Performance</td>
-                        <td class="stars">★★★★☆</td>
-                        <td class="text-gray-300">Very good for stateful agents. Concurrency depends on infra setup (workers, queues).</td>
+                    <tr class="details-row hidden"><td colspan="4"><div class="details-content"><h4 class="font-semibold text-lg text-white">Cost & Licensing</h4><p class="text-gray-300 mt-2">As an MIT-licensed part of the LangChain ecosystem, it is free to incorporate into any project, commercial or otherwise. Costs are purely operational, related to the infrastructure (servers, queues, databases) required to run the application that uses the library.</p></div></td></tr>
+                    <tr class="summary-row">
+                        <td><button class="toggle-details" aria-expanded="false">+</button></td>
+                        <td>Performance</td><td class="stars">★★★★☆</td>
+                        <td class="text-gray-300">Excellent for stateful agents. Concurrency depends on infrastructure.</td>
                     </tr>
-                    <tr>
-                        <td>CI/Env Migrations</td>
-                        <td class="stars">★★★★★</td>
-                        <td class="text-gray-300">Code-first approach integrates perfectly with CI/CD and Git workflows.</td>
+                    <tr class="details-row hidden"><td colspan="4"><div class="details-content"><h4 class="font-semibold text-lg text-white">Performance & Scalability</h4><p class="text-gray-300 mt-2">Designed for durable, long-running tasks. Its performance is not inherent to the library but to the deployment architecture. To achieve high concurrency and scalability, it must be deployed with a robust infrastructure of message queues (e.g., Redis, RabbitMQ) and scalable background workers.</p></div></td></tr>
+                    <tr class="summary-row">
+                        <td><button class="toggle-details" aria-expanded="false">+</button></td>
+                        <td>CI/CD</td><td class="stars">★★★★★</td>
+                        <td class="text-gray-300">Perfect. A code-first approach integrates natively with Git and CI/CD pipelines.</td>
                     </tr>
-                    <tr>
-                        <td>Local Dev</td>
-                        <td class="stars">★★★★★</td>
-                        <td class="text-gray-300">Standard Python/JS library. Very easy for local development (pip/npm install).</td>
+                    <tr class="details-row hidden"><td colspan="4"><div class="details-content"><h4 class="font-semibold text-lg text-white">CI/CD & Environment Migrations</h4><p class="text-gray-300 mt-2">This is an ideal use case. Since the entire workflow is defined in code (Python or TypeScript), it integrates seamlessly with standard software development practices. Workflows are versioned in Git, tested in CI, and deployed as part of a normal application release cycle.</p></div></td></tr>
+                    <tr class="summary-row">
+                        <td><button class="toggle-details" aria-expanded="false">+</button></td>
+                        <td>Local Dev</td><td class="stars">★★★★★</td>
+                        <td class="text-gray-300">Standard library (`pip`/`npm` install). Easy to integrate and debug locally.</td>
                     </tr>
+                    <tr class="details-row hidden"><td colspan="4"><div class="details-content"><h4 class="font-semibold text-lg text-white">Local Development</h4><p class="text-gray-300 mt-2">Development is straightforward. As a standard library, it can be installed via `pip` or `npm` into any local project. Developers can use their preferred IDEs, debuggers, and testing frameworks, making for a very efficient workflow.</p></div></td></tr>
                 </tbody>
             </table>
         </div>
@@ -472,34 +437,39 @@
                      <a href="https://docs.flowiseai.com/api-reference/api-reference" target="_blank" class="pill">API Docs</a>
                 </div>
             </div>
-             <table class="table">
-                <thead><tr><th>Dimension</th><th>Rating</th><th>Notes</th></tr></thead>
+             <table class="table drilldown-table">
+                <thead><tr><th class="w-12"></th><th>Dimension</th><th>Rating</th><th>Notes</th></tr></thead>
                 <tbody>
-                    <tr>
-                        <td>Auth</td>
-                        <td class="stars">★☆☆☆☆</td>
-                        <td class="text-gray-300">No RBAC, SSO, or audit logs in OSS version. Single-user oriented.</td>
+                    <tr class="summary-row">
+                        <td><button class="toggle-details" aria-expanded="false">+</button></td>
+                        <td>Auth</td><td class="stars">★☆☆☆☆</td>
+                        <td class="text-gray-300">None in OSS version. Single-user oriented.</td>
                     </tr>
-                    <tr>
-                        <td>Cost</td>
-                        <td class="stars">★★★★★</td>
-                        <td class="text-gray-300">Apache 2.0, free and open-source. No enforced limits.</td>
+                    <tr class="details-row hidden"><td colspan="4"><div class="details-content"><h4 class="font-semibold text-lg text-white">Auth & Governance</h4><p class="text-gray-300 mt-2">The open-source version is strictly single-user. It lacks any features for RBAC, SSO, or audit logging. These are considered enterprise-grade features and are reserved for the paid Cloud and Enterprise editions.</p></div></td></tr>
+                    <tr class="summary-row">
+                        <td><button class="toggle-details" aria-expanded="false">+</button></td>
+                        <td>Cost</td><td class="stars">★★★★★</td>
+                        <td class="text-gray-300">Apache 2.0 license. Free with no enforced limits.</td>
                     </tr>
-                    <tr>
-                        <td>Performance</td>
-                        <td class="stars">★★★★☆</td>
-                        <td class="text-gray-300">Node.js backend → strong concurrency. Outperforms LangFlow under heavy load.</td>
+                    <tr class="details-row hidden"><td colspan="4"><div class="details-content"><h4 class="font-semibold text-lg text-white">Cost & Licensing</h4><p class="text-gray-300 mt-2">Its permissive Apache 2.0 license allows for free commercial use, modification, and distribution. The self-hosted community edition does not impose any limits on the number of flows, executions, or AI calls.</p></div></td></tr>
+                    <tr class="summary-row">
+                        <td><button class="toggle-details" aria-expanded="false">+</button></td>
+                        <td>Performance</td><td class="stars">★★★★☆</td>
+                        <td class="text-gray-300">Node.js backend provides strong concurrency and outperforms LangFlow.</td>
                     </tr>
-                    <tr>
-                        <td>CI/Env Migrations</td>
-                        <td class="stars">★☆☆☆☆</td>
-                        <td class="text-gray-300">Very limited. No workflow creation via API; requires manual export/import.</td>
+                    <tr class="details-row hidden"><td colspan="4"><div class="details-content"><h4 class="font-semibold text-lg text-white">Performance & Scalability</h4><p class="text-gray-300 mt-2">The Node.js backend is a significant advantage, using a non-blocking, event-driven architecture to handle a high number of simultaneous requests efficiently. Benchmarks show it consistently outperforms Python-based tools like LangFlow in high-concurrency scenarios. It scales horizontally well.</p></div></td></tr>
+                    <tr class="summary-row">
+                        <td><button class="toggle-details" aria-expanded="false">+</button></td>
+                        <td>CI/CD</td><td class="stars">★☆☆☆☆</td>
+                        <td class="text-gray-300">Very limited. Lacks an API for workflow creation, requiring manual migrations.</td>
                     </tr>
-                    <tr>
-                        <td>Local Dev</td>
-                        <td class="stars">★★★★★</td>
-                        <td class="text-gray-300">Easy to run locally (Docker/Node.js). Fully functional for dev use.</td>
+                    <tr class="details-row hidden"><td colspan="4"><div class="details-content"><h4 class="font-semibold text-lg text-white">CI/CD & Environment Migrations</h4><p class="text-gray-300 mt-2">This is a major weakness. There is no public API endpoint for creating or updating workflows programmatically. Migrating flows between environments (e.g., dev to prod) is a manual process of exporting and importing JSON files via the UI, which is error-prone and not suitable for automated CI/CD.</p></div></td></tr>
+                    <tr class="summary-row">
+                        <td><button class="toggle-details" aria-expanded="false">+</button></td>
+                        <td>Local Dev</td><td class="stars">★★★★★</td>
+                        <td class="text-gray-300">Excellent. Easy to run locally via Docker or Node.js for full-featured dev.</td>
                     </tr>
+                    <tr class="details-row hidden"><td colspan="4"><div class="details-content"><h4 class="font-semibold text-lg text-white">Local Development</h4><p class="text-gray-300 mt-2">The local development experience is excellent. It can be started quickly with a simple `docker run` command or `npm` script. The local instance is fully functional, allowing for easy creation, testing, and debugging of workflows.</p></div></td></tr>
                 </tbody>
             </table>
         </div>
@@ -512,43 +482,48 @@
                 <div>
                      <h2 class="text-3xl font-bold text-white flex items-center gap-x-3">
                         <span>Deep Dive: Activepieces</span>
+                        <i class="info-icon" data-tooltip="Founded in 2022, Activepieces is an open-source, no-code business automation platform combining AI capabilities with workflow automation. Led by its founding team.">i</i>
                      </h2>
                 </div>
                 <div class="flex-shrink-0 ml-4 flex gap-x-2">
-                    <i class="info-icon" data-tooltip="Founded in 2022, Activepieces is an open-source, no-code business automation platform combining AI capabilities with workflow automation. Led by its founding team.">i</i>
                     <span class="pill bg-yellow-900/50 text-yellow-300 border-yellow-500/30">★ 17.8k</span>
                     <a href="https://www.activepieces.com/" target="_blank" class="pill">Official Site</a>
                     <a href="https://www.activepieces.com/docs/developers/overview" target="_blank" class="pill">API Docs</a>
                 </div>
             </div>
-             <table class="table">
-                <thead><tr><th>Dimension</th><th>Rating</th><th>Notes (Community Edition)</th></tr></thead>
+             <table class="table drilldown-table">
+                <thead><tr><th class="w-12"></th><th>Dimension</th><th>Rating</th><th>Notes (Community Edition)</th></tr></thead>
                 <tbody>
-                    <tr>
-                        <td>Auth</td>
-                        <td class="stars">★☆☆☆☆</td>
-                        <td class="text-gray-300">Single-user only. No RBAC, SSO, or audit logs. Team/collaboration are enterprise features.</td>
+                    <tr class="summary-row">
+                        <td><button class="toggle-details" aria-expanded="false">+</button></td>
+                        <td>Auth</td><td class="stars">★☆☆☆☆</td>
+                        <td class="text-gray-300">Single-user only. Team, RBAC, and SSO features are paid.</td>
                     </tr>
-                    <tr>
-                        <td>Cost</td>
-                        <td class="stars">★★★★☆</td>
-                        <td class="text-gray-300">MIT core license. Free to self-host with unlimited flows/tasks. Enterprise features are commercial.</td>
+                    <tr class="details-row hidden"><td colspan="4"><div class="details-content"><h4 class="font-semibold text-lg text-white">Auth & Governance</h4><p class="text-gray-300 mt-2">The community edition is strictly single-user. Essential features for team collaboration and governance, such as multi-user projects, RBAC, SSO integration, and audit logs, are reserved for the paid Business and Enterprise editions.</p></div></td></tr>
+                    <tr class="summary-row">
+                        <td><button class="toggle-details" aria-expanded="false">+</button></td>
+                        <td>Cost</td><td class="stars">★★★★☆</td>
+                        <td class="text-gray-300">MIT core is free. Governance and team features are commercial.</td>
                     </tr>
-                    <tr>
-                        <td>Performance</td>
-                        <td class="stars">★★★★☆</td>
-                        <td class="text-gray-300">Node.js + queue engine (~95 flows/sec). Scales linearly with workers. Degrades >1000 concurrent flows.</td>
+                    <tr class="details-row hidden"><td colspan="4"><div class="details-content"><h4 class="font-semibold text-lg text-white">Cost & Licensing</h4><p class="text-gray-300 mt-2">Activepieces uses a dual-license ("open-core") model. The core automation engine is MIT-licensed and free to self-host with unlimited tasks. However, the add-ons that provide enterprise-grade features (like governance and team management) are proprietary and require a commercial license.</p></div></td></tr>
+                    <tr class="summary-row">
+                        <td><button class="toggle-details" aria-expanded="false">+</button></td>
+                        <td>Performance</td><td class="stars">★★★★☆</td>
+                        <td class="text-gray-300">Node.js + Queue Engine (~95 flows/sec). Scales linearly with workers.</td>
                     </tr>
-                    <tr>
-                        <td>CI/Env Migrations</td>
-                        <td class="stars">★★★☆☆</td>
-                        <td class="text-gray-300">API exists for execution, but team/collaboration env features are only in enterprise.</td>
+                    <tr class="details-row hidden"><td colspan="4"><div class="details-content"><h4 class="font-semibold text-lg text-white">Performance & Scalability</h4><p class="text-gray-300 mt-2">The architecture is built for performance and reliability, using a Fastify API backend and a Redis/BullMQ queueing system. This ensures that flows are executed reliably and can scale. Performance scales linearly by adding more worker containers to process jobs from the queue. It can handle high throughput but degrades above ~1000 concurrent flows on a single instance.</p></div></td></tr>
+                    <tr class="summary-row">
+                        <td><button class="toggle-details" aria-expanded="false">+</button></td>
+                        <td>CI/CD</td><td class="stars">★★★☆☆</td>
+                        <td class="text-gray-300">API is mainly for execution. Environment management is a paid feature.</td>
                     </tr>
-                    <tr>
-                        <td>Local Dev</td>
-                        <td class="stars">★★★★☆</td>
-                        <td class="text-gray-300">Can run easily with Docker. Good for building/testing custom "pieces".</td>
+                    <tr class="details-row hidden"><td colspan="4"><div class="details-content"><h4 class="font-semibold text-lg text-white">CI/CD & Environment Migrations</h4><p class="text-gray-300 mt-2">In the community edition, the API is primarily for triggering flow executions, not for managing the flows themselves. Critical CI/CD features like environment management and programmatic workflow migration are part of the paid enterprise offering, limiting automation possibilities in the free tier.</p></div></td></tr>
+                    <tr class="summary-row">
+                        <td><button class="toggle-details" aria-expanded="false">+</button></td>
+                        <td>Local Dev</td><td class="stars">★★★★☆</td>
+                        <td class="text-gray-300">Good Docker-based setup for local testing and building custom "pieces".</td>
                     </tr>
+                    <tr class="details-row hidden"><td colspan="4"><div class="details-content"><h4 class="font-semibold text-lg text-white">Local Development</h4><p class="text-gray-300 mt-2">The local development experience is solid, particularly for creating custom connectors (called "pieces"). The project provides a Docker Compose setup that makes it easy to spin up a local instance for building and testing these extensions.</p></div></td></tr>
                 </tbody>
             </table>
         </div>
@@ -561,43 +536,48 @@
                 <div>
                      <h2 class="text-3xl font-bold text-white flex items-center gap-x-3">
                         <span>Deep Dive: n8n</span>
+                         <i class="info-icon" data-tooltip="Launched in 2019 by Jan Oberhauser, n8n is a fair-code workflow automation platform for connecting applications and services with low code.">i</i>
                      </h2>
                 </div>
                 <div class="flex-shrink-0 ml-4 flex gap-x-2">
-                    <i class="info-icon" data-tooltip="Launched in 2019 by Jan Oberhauser, n8n is a fair-code workflow automation platform for connecting applications and services with low code.">i</i>
                     <span class="pill bg-yellow-900/50 text-yellow-300 border-yellow-500/30">★ 136k</span>
                     <a href="https://n8n.io/" target="_blank" class="pill">Site</a>
                     <a href="https://docs.n8n.io/public-api/" target="_blank" class="pill">API</a>
                 </div>
             </div>
-             <table class="table">
-                <thead><tr><th>Dimension</th><th>Rating</th><th>Notes (Community Edition)</th></tr></thead>
+             <table class="table drilldown-table">
+                <thead><tr><th class="w-12"></th><th>Dimension</th><th>Rating</th><th>Notes (Community Edition)</th></tr></thead>
                 <tbody>
-                    <tr>
-                        <td>Auth</td>
-                        <td class="stars">★☆☆☆☆</td>
-                        <td class="text-gray-300">Strictly single-user. No RBAC, SSO, or LDAP. Many governance features are gated.</td>
+                    <tr class="summary-row">
+                        <td><button class="toggle-details" aria-expanded="false">+</button></td>
+                        <td>Auth</td><td class="stars">★☆☆☆☆</td>
+                        <td class="text-gray-300">Strictly single-user. No RBAC, SSO, or LDAP. Governance features are gated.</td>
                     </tr>
-                    <tr>
-                        <td>Cost</td>
-                        <td class="stars">★★★☆☆</td>
-                        <td class="text-gray-300">Free to self-host, but "Fair-Code" license (not OSI) restricts SaaS resale.</td>
+                    <tr class="details-row hidden"><td colspan="4"><div class="details-content"><h4 class="font-semibold text-lg text-white">Auth & Governance</h4><p class="text-gray-300 mt-2">The community edition is designed for a single user instance. It lacks multi-user support, sharing, RBAC, and SSO. These critical governance features are reserved for the paid Business and Enterprise plans, which unlock them with a license key.</p></div></td></tr>
+                    <tr class="summary-row">
+                        <td><button class="toggle-details" aria-expanded="false">+</button></td>
+                        <td>Cost</td><td class="stars">★★★☆☆</td>
+                        <td class="text-gray-300">Free to self-host, but the "Fair-Code" license is restrictive and not OSI-approved.</td>
                     </tr>
-                    <tr>
-                        <td>Performance</td>
-                        <td class="stars">★★★★☆</td>
-                        <td class="text-gray-300">Node.js. ~200 ops/sec benchmark. Parallel workflows supported. Queue mode for scaling.</td>
+                    <tr class="details-row hidden"><td colspan="4"><div class="details-content"><h4 class="font-semibold text-lg text-white">Cost & Licensing</h4><p class="text-gray-300 mt-2">While free to self-host for internal or personal use, its "Sustainable Use License" is source-available but not OSI-approved open source. It places restrictions on commercial use, most notably preventing you from offering a service that competes with n8n's own cloud offering.</p></div></td></tr>
+                    <tr class="summary-row">
+                        <td><button class="toggle-details" aria-expanded="false">+</button></td>
+                        <td>Performance</td><td class="stars">★★★★☆</td>
+                        <td class="text-gray-300">Node.js based with a ~200 ops/sec benchmark. Supports queue mode for scaling.</td>
                     </tr>
-                    <tr>
-                        <td>CI/Env Migrations</td>
-                        <td class="stars">★☆☆☆☆</td>
+                    <tr class="details-row hidden"><td colspan="4"><div class="details-content"><h4 class="font-semibold text-lg text-white">Performance & Scalability</h4><p class="text-gray-300 mt-2">n8n demonstrates strong performance with its Node.js backend, benchmarking at around 200 operations/sec. For scalability, it supports a queue mode (using Redis) that allows it to distribute executions across multiple worker instances, a key feature for handling high volumes.</p></div></td></tr>
+                    <tr class="summary-row">
+                        <td><button class="toggle-details" aria-expanded="false">+</button></td>
+                        <td>CI/CD</td><td class="stars">★☆☆☆☆</td>
                         <td class="text-gray-300">Very limited API in OSS. No version control or multi-env support.</td>
                     </tr>
-                    <tr>
-                        <td>Local Dev</td>
-                        <td class="stars">★★★★☆</td>
-                        <td class="text-gray-300">Easy local dev via Docker. Good for personal use/testing.</td>
+                    <tr class="details-row hidden"><td colspan="4"><div class="details-content"><h4 class="font-semibold text-lg text-white">CI/CD & Environment Migrations</h4><p class="text-gray-300 mt-2">The public REST API in the OSS version is very limited and does not provide endpoints for programmatic workflow management. There is no built-in version control or support for managing workflows across multiple environments (dev, staging, prod), making automated CI/CD difficult.</p></div></td></tr>
+                    <tr class="summary-row">
+                        <td><button class="toggle-details" aria-expanded="false">+</button></td>
+                        <td>Local Dev</td><td class="stars">★★★★☆</td>
+                        <td class="text-gray-300">Easy local dev via Docker. Good for personal use and testing custom nodes.</td>
                     </tr>
+                     <tr class="details-row hidden"><td colspan="4"><div class="details-content"><h4 class="font-semibold text-lg text-white">Local Development</h4><p class="text-gray-300 mt-2">The local development setup is straightforward using Docker. This makes it easy for individual developers to run an instance for personal use, testing, or developing custom nodes to extend the platform's functionality.</p></div></td></tr>
                 </tbody>
             </table>
         </div>
@@ -741,10 +721,11 @@
       window.addEventListener('resize', () => goToSlide(getCurrentIndex()));
       initialize();
 
-      // Summary table drill-down logic
-      const summaryTable = document.getElementById('summary-table');
-      if (summaryTable) {
-        const toggles = summaryTable.querySelectorAll('.toggle-details');
+      // Generic drill-down logic for all tables with the '.drilldown-table' class
+      function setupDrilldown(tableElement) {
+        if (!tableElement) return;
+
+        const toggles = tableElement.querySelectorAll('.toggle-details');
         
         toggles.forEach(toggle => {
           toggle.addEventListener('click', (e) => {
@@ -752,10 +733,13 @@
             const detailsRow = button.closest('tr').nextElementSibling;
             const isExpanded = button.getAttribute('aria-expanded') === 'true';
 
-            summaryTable.querySelectorAll('.details-row').forEach(row => {
+            // Close all other details rows within this specific table
+            tableElement.querySelectorAll('.details-row').forEach(row => {
               if (row !== detailsRow) row.classList.add('hidden');
             });
-            toggles.forEach(btn => {
+
+            // Reset all other buttons within this specific table
+            tableElement.querySelectorAll('.toggle-details').forEach(btn => {
               if (btn !== button) {
                 btn.setAttribute('aria-expanded', 'false');
                 btn.classList.remove('expanded');
@@ -763,6 +747,7 @@
               }
             });
 
+            // Toggle the clicked row and button
             detailsRow.classList.toggle('hidden');
             button.setAttribute('aria-expanded', !isExpanded);
             button.classList.toggle('expanded');
@@ -770,6 +755,8 @@
           });
         });
       }
+
+      document.querySelectorAll('.drilldown-table').forEach(setupDrilldown);
       
       // Navigation from title slide pills
       const titlePillsContainer = document.getElementById('title-slide-pills');
@@ -777,7 +764,6 @@
           titlePillsContainer.addEventListener('click', (e) => {
               if (e.target.matches('button.pill')) {
                   const toolName = e.target.textContent.trim();
-                  // A bit fuzzy matching to handle "LangGraph (Library)"
                   const targetIndex = slides.findIndex(slide => {
                       const h2 = slide.querySelector('h2');
                       return h2 && h2.textContent.includes(toolName);
