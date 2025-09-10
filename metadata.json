@@ -1,0 +1,5 @@
+{
+  "name": "AI Pipeline Candidates Presentation",
+  "description": "An interactive web-based presentation deck summarizing and comparing various AI pipeline technologies, based on an internal engineering review document. The presentation covers candidates like LangFlow, LangGraph, Flowise, Activepieces, and n8n, evaluating them on criteria such as auth, cost, performance, and DevOps.",
+  "requestFramePermissions": []
+}

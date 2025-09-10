@@ -1,0 +1,641 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Pipeline Candidates – Engineering Review</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --fg: #e6edf3;
+      --muted: #7d8590;
+      --accent: #58a6ff;
+      --accent2: #3fb950;
+      --card-bg: #161b22;
+      --card-border: #30363d;
+      --shadow: rgba(0,0,0,.35);
+      --tooltip-bg: #2d333b;
+    }
+    html, body { height: 100%; }
+    body { 
+      margin: 0; 
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+      background-color: var(--bg);
+      color: var(--fg);
+    }
+    .deck { position: relative; height: 100%; overflow: hidden; }
+    .slides { 
+      height: 100%; 
+      display: flex; 
+      scroll-snap-type: x mandatory; 
+      overflow-x: auto; 
+      overflow-y: hidden; 
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+    .slide { 
+      scroll-snap-align: start; 
+      flex: 0 0 100%; 
+      height: 100%; 
+      padding: 3rem clamp(1.5rem, 6vw, 5rem);
+      box-sizing: border-box; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
+    }
+    .card { 
+      max-width: 1100px; 
+      width: 100%; 
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      box-shadow: 0 10px 40px var(--shadow); 
+      border-radius: 1.5rem; 
+      padding: 2.5rem 3rem;
+      transition: all 0.3s ease;
+    }
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    .table th, .table td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--card-border);
+      vertical-align: top;
+    }
+    .table th {
+      color: var(--muted);
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .table tr:last-child td {
+      border-bottom: none;
+    }
+    .stars {
+      color: #f0c419;
+      letter-spacing: 2px;
+      font-size: 1.1rem;
+      white-space: nowrap;
+    }
+    .nav { position: absolute; left: 1.5rem; bottom: 1.5rem; display: flex; gap: 0.5rem; z-index: 10; }
+    .nav button { 
+      all: unset; 
+      cursor: pointer; 
+      background-color: rgba(255,255,255,.07);
+      border: 1px solid var(--card-border);
+      padding: 0.5rem 1rem;
+      border-radius: 0.75rem;
+      font-size: 0.875rem;
+      transition: all 0.2s ease;
+    }
+    .nav button:hover { background-color: rgba(255,255,255,.1); }
+    .nav button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .progress-container { position: absolute; left: 0; right: 0; bottom: 0; height: 6px; background-color: rgba(255,255,255,.07); }
+    .progress-bar { height: 100%; width: 0; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width .3s cubic-bezier(0.25, 1, 0.5, 1); }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .pill { display: inline-block; padding: 0.25rem 0.75rem; border: 1px solid var(--card-border); border-radius: 999px; font-size: 0.8rem; background-color: rgba(88,166,255,0.1); transition: background-color 0.2s ease; }
+    .pill:hover { background-color: rgba(88,166,255,0.2); text-decoration: none; }
+    .info-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.25rem;
+        height: 1.25rem;
+        border-radius: 999px;
+        border: 1px solid var(--muted);
+        color: var(--muted);
+        font-size: 0.75rem;
+        font-weight: bold;
+        font-style: normal;
+        cursor: help;
+        position: relative;
+    }
+    .info-icon:hover::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 140%;
+        min-width: 300px;
+        max-width: 400px;
+        background-color: var(--tooltip-bg);
+        color: var(--fg);
+        padding: 0.75rem;
+        border-radius: 0.5rem;
+        border: 1px solid var(--card-border);
+        font-size: 0.875rem;
+        font-weight: normal;
+        line-height: 1.5;
+        text-align: left;
+        white-space: normal;
+        z-index: 20;
+        box-shadow: 0 4px 12px var(--shadow);
+        pointer-events: none;
+        opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div id="app" class="deck" role="application" aria-label="AI Pipeline Candidates Presentation">
+    <div class="slides" id="slides" tabindex="0">
+      
+      <!-- Slide 1: Title -->
+      <section class="slide">
+        <div class="card">
+          <h1 class="text-5xl font-bold tracking-tight text-white">AI Pipeline Candidates</h1>
+          <h2 class="text-2xl text-gray-400 mt-2">Engineering Review – Self‑Hosted Focus</h2>
+          <p class="text-lg text-gray-300 mt-8">An analysis of leading AI pipeline technologies to identify the best self-hosted solution for flexibility, scalability, cost, and support.</p>
+          <div class="mt-6 flex flex-wrap gap-2">
+            <span class="pill">LangFlow</span>
+            <span class="pill">LangGraph</span>
+            <span class="pill">Flowise</span>
+            <span class="pill">Activepieces</span>
+            <span class="pill">n8n</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 2: Introduction -->
+      <section class="slide">
+        <div class="card">
+          <h2 class="text-3xl font-bold text-white">1. Introduction – Set the Stage</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
+            <div>
+              <h3 class="text-xl font-semibold text-sky-400">Problem / Need</h3>
+              <ul class="list-disc list-outside ml-5 mt-2 space-y-2 text-gray-300">
+                <li>Reduce engineering effort in building and maintaining AI workflows.</li>
+                <li>Standardize workflows for reliability and governance.</li>
+                <li>Prepare for production use with scalable and robust solutions.</li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="text-xl font-semibold text-sky-400">Evaluation Criteria</h3>
+              <ul class="list-disc list-outside ml-5 mt-2 space-y-2 text-gray-300">
+                <li>Auth & Governance (RBAC, SSO)</li>
+                <li>Cost & Licensing (Open Source, Tiers)</li>
+                <li>Performance & Scalability</li>
+                <li>DevOps/Hosting (Docker, K8s, Serverless)</li>
+                <li>CI/CD & Environment Migration</li>
+                <li>Support Model & Local Dev Experience</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 3: Comparative Overview -->
+      <section class="slide">
+        <div class="card">
+          <h2 class="text-3xl font-bold text-white">2. Comparative Overview</h2>
+          <p class="text-gray-400 mt-1">A high-level look at the community editions of each candidate across key criteria.</p>
+          <div class="overflow-x-auto">
+            <table class="table mt-4 w-full">
+              <thead>
+                <tr>
+                  <th>Technology</th>
+                  <th>GitHub Stars</th>
+                  <th>Auth & Gov</th>
+                  <th>Cost & License</th>
+                  <th>Performance</th>
+                  <th>Dev Experience</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="font-semibold text-white">LangFlow</td>
+                  <td><div class="font-semibold text-yellow-400">115k ★</div></td>
+                  <td><div class="stars">★★☆☆☆</div><p class="text-sm text-gray-400 mt-1">Proxy-based auth</p></td>
+                  <td><div class="stars">★★★★★</div><p class="text-sm text-gray-400 mt-1">MIT, No gates</p></td>
+                  <td><div class="stars">★★★☆☆</div><p class="text-sm text-gray-400 mt-1">Python, struggles parallel</p></td>
+                  <td><div class="stars">★★★★☆</div><p class="text-sm text-gray-400 mt-1">Great CI/CD & Local Dev</p></td>
+                </tr>
+                <tr>
+                  <td class="font-semibold text-white">LangGraph</td>
+                  <td><div class="font-semibold text-yellow-400">18.4k ★</div></td>
+                  <td><div class="stars">☆☆☆☆☆</div><p class="text-sm text-gray-400 mt-1">BYO Auth (Library)</p></td>
+                  <td><div class="stars">★★★★★</div><p class="text-sm text-gray-400 mt-1">MIT, free to use</p></td>
+                  <td><div class="stars">★★★★☆</div><p class="text-sm text-gray-400 mt-1">Infra-dependent, for agents</p></td>
+                  <td><div class="stars">★★★★☆</div><p class="text-sm text-gray-400 mt-1">Code-first CI/CD, DevOps heavy</p></td>
+                </tr>
+                <tr>
+                  <td class="font-semibold text-white">Flowise</td>
+                  <td><div class="font-semibold text-yellow-400">43.5k ★</div></td>
+                  <td><div class="stars">★☆☆☆☆</div><p class="text-sm text-gray-400 mt-1">Single-user OSS</p></td>
+                  <td><div class="stars">★★★★★</div><p class="text-sm text-gray-400 mt-1">Apache 2.0, no limits</p></td>
+                  <td><div class="stars">★★★★☆</div><p class="text-sm text-gray-400 mt-1">Node.js, high concurrency</p></td>
+                  <td><div class="stars">★★★☆☆</div><p class="text-sm text-gray-400 mt-1">Poor CI/CD, great Local Dev</p></td>
+                </tr>
+                <tr>
+                  <td class="font-semibold text-white">Activepieces</td>
+                  <td><div class="font-semibold text-yellow-400">17.8k ★</div></td>
+                  <td><div class="stars">★☆☆☆☆</div><p class="text-sm text-gray-400 mt-1">Team features paid</p></td>
+                  <td><div class="stars">★★★★☆</div><p class="text-sm text-gray-400 mt-1">MIT core, paid addons</p></td>
+                  <td><div class="stars">★★★★☆</div><p class="text-sm text-gray-400 mt-1">Node.js + Queue</p></td>
+                  <td><div class="stars">★★★☆☆</div><p class="text-sm text-gray-400 mt-1">API for execution only</p></td>
+                </tr>
+                <tr>
+                  <td class="font-semibold text-white">n8n</td>
+                  <td><div class="font-semibold text-yellow-400">136k ★</div></td>
+                  <td><div class="stars">★☆☆☆☆</div><p class="text-sm text-gray-400 mt-1">Single-user, features gated</p></td>
+                  <td><div class="stars">★★★☆☆</div><p class="text-sm text-gray-400 mt-1">Restrictive Fair-Code</p></td>
+                  <td><div class="stars">★★★★☆</div><p class="text-sm text-gray-400 mt-1">Node.js, good benchmark</p></td>
+                  <td><div class="stars">★★★☆☆</div><p class="text-sm text-gray-400 mt-1">Limited API in OSS</p></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 4: LangFlow -->
+      <section class="slide">
+        <div class="card">
+            <div class="flex justify-between items-start">
+                <div>
+                    <h2 class="text-3xl font-bold text-white flex items-center gap-x-3">
+                        <span>Deep Dive: LangFlow</span>
+                        <i class="info-icon" data-tooltip="Launched in 2023 and acquired by DataStax in 2024, LangFlow is a visual, drag-and-drop platform for building and deploying AI agents and complex LLM workflows.">i</i>
+                    </h2>
+                </div>
+                <div class="flex-shrink-0 ml-4 flex gap-x-2">
+                    <span class="pill bg-yellow-900/50 text-yellow-300 border-yellow-500/30">★ 115k</span>
+                    <a href="https://www.langflow.org/" target="_blank" class="pill">Official Site</a>
+                    <a href="https://docs.langflow.org/api-reference" target="_blank" class="pill">API Docs</a>
+                </div>
+            </div>
+            <table class="table">
+                <thead><tr><th>Dimension</th><th>Rating</th><th>Notes</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td>Auth</td>
+                        <td class="stars">★★☆☆☆</td>
+                        <td class="text-gray-300">No built-in multi-user/RBAC. Suited for single devs or behind a proxy.</td>
+                    </tr>
+                    <tr>
+                        <td>Cost</td>
+                        <td class="stars">★★★★★</td>
+                        <td class="text-gray-300">100% free (MIT License). No feature gates. Pay only for infra/API costs.</td>
+                    </tr>
+                    <tr>
+                        <td>Performance</td>
+                        <td class="stars">★★★☆☆</td>
+                        <td class="text-gray-300">Python (FastAPI). Good for prototyping but struggles with heavy parallel loads vs. Node.js tools.</td>
+                    </tr>
+                    <tr>
+                        <td>CI/Env Migrations</td>
+                        <td class="stars">★★★★★</td>
+                        <td class="text-gray-300">Full API access. Workflows export as JSON, great for version control.</td>
+                    </tr>
+                    <tr>
+                        <td>Local Dev</td>
+                        <td class="stars">★★★★☆</td>
+                        <td class="text-gray-300">Very good. Easy to install via pip or Docker. Full local dev support.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+      </section>
+
+      <!-- Slide 5: LangGraph -->
+      <section class="slide">
+        <div class="card">
+            <div class="flex justify-between items-start">
+                <div>
+                     <h2 class="text-3xl font-bold text-white flex items-center gap-x-3">
+                        <span>Deep Dive: LangGraph (Library)</span>
+                        <i class="info-icon" data-tooltip="Introduced in 2024 by the LangChain team, LangGraph is a low-level framework for building stateful, long-running, and durable AI agents using a graph-based structure.">i</i>
+                    </h2>
+                </div>
+                <div class="flex-shrink-0 ml-4 flex gap-x-2">
+                    <span class="pill bg-yellow-900/50 text-yellow-300 border-yellow-500/30">★ 18.4k</span>
+                    <a href="https://langchain-ai.github.io/langgraph/" target="_blank" class="pill">Official Site</a>
+                    <a href="https://langchain-ai.github.io/langgraph/reference/overview/" target="_blank" class="pill">API Docs</a>
+                </div>
+            </div>
+            <table class="table">
+                <thead><tr><th>Dimension</th><th>Rating</th><th>Notes</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td>Auth</td>
+                        <td class="stars">☆☆☆☆☆</td>
+                        <td class="text-gray-300">Not applicable. As a library, auth must be implemented by developers.</td>
+                    </tr>
+                    <tr>
+                        <td>Cost</td>
+                        <td class="stars">★★★★★</td>
+                        <td class="text-gray-300">MIT License, open-source. Free to use, only infra costs.</td>
+                    </tr>
+                    <tr>
+                        <td>Performance</td>
+                        <td class="stars">★★★★☆</td>
+                        <td class="text-gray-300">Very good for stateful agents. Concurrency depends on infra setup (workers, queues).</td>
+                    </tr>
+                    <tr>
+                        <td>CI/Env Migrations</td>
+                        <td class="stars">★★★★★</td>
+                        <td class="text-gray-300">Code-first approach integrates perfectly with CI/CD and Git workflows.</td>
+                    </tr>
+                    <tr>
+                        <td>Local Dev</td>
+                        <td class="stars">★★★★★</td>
+                        <td class="text-gray-300">Standard Python/JS library. Very easy for local development (pip/npm install).</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+      </section>
+
+      <!-- Slide 6: Flowise -->
+      <section class="slide">
+        <div class="card">
+            <div class="flex justify-between items-start">
+                <div>
+                     <h2 class="text-3xl font-bold text-white flex items-center gap-x-3">
+                        <span>Deep Dive: Flowise (Community)</span>
+                        <i class="info-icon" data-tooltip="Founded in 2023, Flowise is an open-source, low-code platform with visual builders for creating AI agents and workflows. Acquired by Workday in 2025.">i</i>
+                    </h2>
+                </div>
+                <div class="flex-shrink-0 ml-4 flex gap-x-2">
+                     <span class="pill bg-yellow-900/50 text-yellow-300 border-yellow-500/30">★ 43.5k</span>
+                     <a href="https://flowiseai.com/" target="_blank" class="pill">Official Site</a>
+                     <a href="https://docs.flowiseai.com/api-reference/api-reference" target="_blank" class="pill">API Docs</a>
+                </div>
+            </div>
+             <table class="table">
+                <thead><tr><th>Dimension</th><th>Rating</th><th>Notes</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td>Auth</td>
+                        <td class="stars">★☆☆☆☆</td>
+                        <td class="text-gray-300">No RBAC, SSO, or audit logs in OSS version. Single-user oriented.</td>
+                    </tr>
+                    <tr>
+                        <td>Cost</td>
+                        <td class="stars">★★★★★</td>
+                        <td class="text-gray-300">Apache 2.0, free and open-source. No enforced limits.</td>
+                    </tr>
+                    <tr>
+                        <td>Performance</td>
+                        <td class="stars">★★★★☆</td>
+                        <td class="text-gray-300">Node.js backend → strong concurrency. Outperforms LangFlow under heavy load.</td>
+                    </tr>
+                    <tr>
+                        <td>CI/Env Migrations</td>
+                        <td class="stars">★☆☆☆☆</td>
+                        <td class="text-gray-300">Very limited. No workflow creation via API; requires manual export/import.</td>
+                    </tr>
+                    <tr>
+                        <td>Local Dev</td>
+                        <td class="stars">★★★★★</td>
+                        <td class="text-gray-300">Easy to run locally (Docker/Node.js). Fully functional for dev use.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+      </section>
+
+      <!-- Slide 7: Activepieces & n8n -->
+      <section class="slide">
+        <div class="card">
+            <h2 class="text-3xl font-bold text-white">Deep Dive: Activepieces & n8n (Community)</h2>
+            <p class="text-gray-400 mt-1">Automation platforms with strong enterprise-grade paid tiers.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
+                <div>
+                    <h3 class="text-xl font-semibold text-sky-400 flex items-center gap-x-2 flex-wrap">
+                        Activepieces
+                        <i class="info-icon" data-tooltip="Founded in 2022, Activepieces is an open-source, no-code business automation platform combining AI capabilities with workflow automation. Led by its founding team.">i</i>
+                        <span class="text-sm pill bg-yellow-900/50 text-yellow-300 border-yellow-500/30">★ 17.8k</span>
+                        <a href="https://www.activepieces.com/" target="_blank" class="text-sm pill">Site</a>
+                        <a href="https://www.activepieces.com/docs/developers/overview" target="_blank" class="text-sm pill">API</a>
+                    </h3>
+                    <ul class="list-disc list-outside ml-5 mt-2 space-y-1 text-gray-300">
+                        <li><strong>License:</strong> MIT core, but dual-license for enterprise features.</li>
+                        <li><strong>Auth:</strong> Single-user only in community edition. RBAC/SSO are paid.</li>
+                        <li><strong>Performance:</strong> Node.js + queue engine (~95 flows/sec). Scales linearly.</li>
+                        <li><strong>Key Trait:</strong> Strong enterprise governance features in paid versions.</li>
+                    </ul>
+                </div>
+                <div>
+                     <h3 class="text-xl font-semibold text-sky-400 flex items-center gap-x-2 flex-wrap">
+                        n8n
+                        <i class="info-icon" data-tooltip="Launched in 2019 by Jan Oberhauser, n8n is a fair-code workflow automation platform for connecting applications and services with low code.">i</i>
+                        <span class="text-sm pill bg-yellow-900/50 text-yellow-300 border-yellow-500/30">★ 136k</span>
+                        <a href="https://n8n.io/" target="_blank" class="text-sm pill">Site</a>
+                        <a href="https://docs.n8n.io/public-api/" target="_blank" class="text-sm pill">API</a>
+                    </h3>
+                    <ul class="list-disc list-outside ml-5 mt-2 space-y-1 text-gray-300">
+                        <li><strong>License:</strong> "Fair-Code", not OSI-approved. Restricts commercial SaaS resale.</li>
+                        <li><strong>Auth:</strong> Strictly single-user. Enterprise features (RBAC/SSO) are gated.</li>
+                        <li><strong>Performance:</strong> Node.js (~200 ops/sec). Queue mode for scaling.</li>
+                        <li><strong>Key Trait:</strong> Mature automation tool, but restrictive license and feature gating.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+      </section>
+
+      <!-- Slide 8: Concurrency & Performance -->
+       <section class="slide">
+        <div class="card">
+            <h2 class="text-3xl font-bold text-white">Concurrency & Performance Summary</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Technology</th>
+                        <th>Tech Stack</th>
+                        <th>Concurrency Model</th>
+                        <th>Scaling Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>LangFlow</strong></td>
+                        <td class="text-gray-400">Python (FastAPI)</td>
+                        <td class="text-gray-400">Limited; struggles with heavy parallel loads.</td>
+                        <td class="text-gray-400">Scales horizontally, but single container throughput is lower than Node.js tools.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>LangGraph</strong></td>
+                        <td class="text-gray-400">Python/JS Library</td>
+                        <td class="text-gray-400">High (deployment-dependent). Supports async tasks, retries.</td>
+                        <td class="text-gray-400">Production-ready; scaling via worker clustering or async task queues.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Flowise</strong></td>
+                        <td class="text-gray-400">Node.js (Express)</td>
+                        <td class="text-gray-400">High; async event loop handles many requests.</td>
+                        <td class="text-gray-400">Scales horizontally with multiple containers. Outperforms LangFlow at high concurrency.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Activepieces</strong></td>
+                        <td class="text-gray-400">Node.js + BullMQ</td>
+                        <td class="text-gray-400">High (~95 flows/sec benchmark). Degrades >1000 concurrent flows.</td>
+                        <td class="text-gray-400">Scales linearly by adding worker containers pulling from Redis. Queue-based.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>n8n</strong></td>
+                        <td class="text-gray-400">Node.js</td>
+                        <td class="text-gray-400">High (~200 ops/sec benchmark).</td>
+                        <td class="text-gray-400">Queue mode + Redis workers for horizontal scaling (enterprise feature).</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+      </section>
+      
+      <!-- Slide 9: Key Insights -->
+      <section class="slide">
+        <div class="card">
+          <h2 class="text-3xl font-bold text-white">Key Insights (Cross-cutting Findings)</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 mt-6">
+              <div>
+                  <h3 class="text-lg font-semibold text-sky-400">Best for Prototyping</h3>
+                  <p class="text-gray-300"><strong>LangFlow:</strong> Permissive MIT license, simple Docker setup, and strong local dev support make it ideal for quick experimentation and RAG workflows.</p>
+              </div>
+              <div>
+                  <h3 class="text-lg font-semibold text-sky-400">Best for High Concurrency</h3>
+                  <p class="text-gray-300"><strong>Flowise:</strong> Node.js backend handles heavy load efficiently. Benchmarks show it outperforming Python-based tools under stress.</p>
+              </div>
+              <div>
+                  <h3 class="text-lg font-semibold text-sky-400">Best for Durable, Long-Running Agents</h3>
+                  <p class="text-gray-300"><strong>LangGraph:</strong> Designed for stateful and persistent workflows. Excels at orchestrating multi-agent and long-duration tasks through queues and async tasks.</p>
+              </div>
+              <div>
+                  <h3 class="text-lg font-semibold text-sky-400">Best for Enterprise Governance</h3>
+                  <p class="text-gray-300"><strong>Activepieces / n8n (Paid Tiers):</strong> Both offer RBAC, SSO, audit logs, and advanced CI/CD. Strong candidates where compliance and multi-user collaboration are key.</p>
+              </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 10: Recommendations -->
+      <section class="slide">
+        <div class="card">
+          <h2 class="text-3xl font-bold text-white">Recommendations</h2>
+          <p class="text-lg text-gray-300 mt-4">Narrow down to 2-3 candidates depending on what matters most:</p>
+          <ul class="list-disc list-outside ml-5 mt-4 space-y-3 text-gray-200 text-lg">
+            <li>For <strong>experimentation and RAG workflows:</strong><br/><span class="font-semibold text-white">LangFlow</span></li>
+            <li>For <strong>production workloads with high concurrency:</strong><br/><span class="font-semibold text-white">Flowise</span></li>
+            <li>For <strong>durability and complex agent orchestration:</strong><br/><span class="font-semibold text-white">LangGraph (as a library)</span></li>
+            <li>If <strong>enterprise governance outweighs licensing flexibility:</strong><br/><span class="font-semibold text-white">Activepieces</span> or <span class="font-semibold text-white">n8n (paid tiers)</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Slide 11: Next Steps -->
+      <section class="slide">
+        <div class="card">
+          <h2 class="text-3xl font-bold text-white">Next Steps</h2>
+          <ol class="list-decimal list-outside ml-5 mt-6 space-y-4 text-gray-200 text-xl">
+              <li>
+                  <strong>Pilot & Validate:</strong>
+                  <p class="text-lg text-gray-300 mt-1">Deploy <span class="font-semibold text-white">Flowise</span> and integrate the <span class="font-semibold text-white">LangGraph</span> library into a sample service on a shared EKS cluster.</p>
+              </li>
+              <li>
+                  <strong>Measure & Compare:</strong>
+                  <p class="text-lg text-gray-300 mt-1">Benchmark throughput, latency, failure handling, and the ergonomics of CI/CD and environment migration with real-world workloads.</p>
+              </li>
+              <li>
+                  <strong>Decide & Standardize:</strong>
+                  <p class="text-lg text-gray-300 mt-1">Based on pilot results, decide on a single platform for most use cases, or a hybrid approach (e.g., Flowise for simple services, LangGraph for complex agents).</p>
+              </li>
+          </ol>
+        </div>
+      </section>
+
+    </div>
+
+    <div class="nav" aria-hidden="false">
+      <button id="prev" aria-label="Previous slide">◀︎ Prev</button>
+      <button id="next" aria-label="Next slide">Next ▶︎</button>
+    </div>
+    <div class="progress-container"><div class="progress-bar" id="bar"></div></div>
+  </div>
+
+  <script>
+    (function(){
+      const scroller = document.getElementById('slides');
+      if (!scroller) return;
+
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const bar = document.getElementById('bar');
+      const prev = document.getElementById('prev');
+      const next = document.getElementById('next');
+      const totalSlides = slides.length;
+
+      function getCurrentIndex() {
+        const slideWidth = scroller.clientWidth;
+        // Add a small offset to handle floating point inaccuracies
+        return Math.round((scroller.scrollLeft + 1) / slideWidth);
+      }
+
+      function goToSlide(index) {
+        const clampedIndex = Math.max(0, Math.min(index, totalSlides - 1));
+        scroller.scrollTo({ left: clampedIndex * scroller.clientWidth, behavior: 'smooth' });
+        updateUI(clampedIndex);
+      }
+
+      function updateUI(currentIndex) {
+        const progress = ((currentIndex + 1) / totalSlides) * 100;
+        if (bar) bar.style.width = progress + '%';
+        
+        if (prev) prev.disabled = currentIndex === 0;
+        if (next) next.disabled = currentIndex === totalSlides - 1;
+
+        // Update URL hash without adding to history
+        const newUrl = new URL(window.location);
+        newUrl.hash = '#' + (currentIndex + 1);
+        history.replaceState(null, '', newUrl);
+      }
+
+      function handleScroll() {
+        // Use a timeout to debounce scroll events and get the final position
+        let timer;
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          const currentIndex = getCurrentIndex();
+          updateUI(currentIndex);
+        }, 150);
+      }
+
+      // Event Listeners
+      scroller.addEventListener('scroll', handleScroll, { passive: true });
+      if (prev) prev.addEventListener('click', () => goToSlide(getCurrentIndex() - 1));
+      if (next) next.addEventListener('click', () => goToSlide(getCurrentIndex() + 1));
+      
+      document.addEventListener('keydown', (e) => {
+        const currentIndex = getCurrentIndex();
+        if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+          e.preventDefault();
+          goToSlide(currentIndex + 1);
+        }
+        if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+          e.preventDefault();
+          goToSlide(currentIndex - 1);
+        }
+      });
+
+      // Initial Setup
+      function initialize() {
+          const hash = parseInt((location.hash || '').replace('#', ''), 10);
+          const initialIndex = !Number.isNaN(hash) && hash > 0 && hash <= totalSlides ? hash - 1 : 0;
+          
+          // Use setTimeout to ensure the layout is complete before scrolling
+          setTimeout(() => {
+              scroller.scrollTo({ left: initialIndex * scroller.clientWidth, behavior: 'auto' });
+              updateUI(initialIndex);
+          }, 50);
+      }
+
+      window.addEventListener('resize', () => goToSlide(getCurrentIndex()));
+
+      initialize();
+    })();
+  </script>
+</body>
+</html>
