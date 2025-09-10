@@ -100,6 +100,17 @@
     a:hover { text-decoration: underline; }
     .pill { display: inline-block; padding: 0.25rem 0.75rem; border: 1px solid var(--card-border); border-radius: 999px; font-size: 0.8rem; background-color: rgba(88,166,255,0.1); transition: background-color 0.2s ease; }
     .pill:hover { background-color: rgba(88,166,255,0.2); text-decoration: none; }
+    
+    /* Pill as a button */
+    button.pill {
+      cursor: pointer;
+      color: var(--fg);
+      font-family: inherit;
+    }
+    button.pill:hover {
+      background-color: rgba(88,166,255,0.2);
+    }
+    
     .info-icon {
         display: inline-flex;
         align-items: center;
@@ -174,17 +185,17 @@
     <div class="slides" id="slides" tabindex="0">
       
       <!-- Slide 1: Title -->
-      <section class="slide">
+      <section class="slide" id="title-slide">
         <div class="card">
           <h1 class="text-5xl font-bold tracking-tight text-white">AI Pipeline Candidates</h1>
           <h2 class="text-2xl text-gray-400 mt-2">Engineering Review – Self‑Hosted Focus</h2>
           <p class="text-lg text-gray-300 mt-8">An analysis of leading AI pipeline technologies to identify the best self-hosted solution for flexibility, scalability, cost, and support.</p>
-          <div class="mt-6 flex flex-wrap gap-2">
-            <span class="pill">LangFlow</span>
-            <span class="pill">LangGraph</span>
-            <span class="pill">Flowise</span>
-            <span class="pill">Activepieces</span>
-            <span class="pill">n8n</span>
+          <div id="title-slide-pills" class="mt-6 flex flex-wrap gap-2">
+            <button class="pill">LangFlow</button>
+            <button class="pill">LangGraph</button>
+            <button class="pill">Flowise</button>
+            <button class="pill">Activepieces</button>
+            <button class="pill">n8n</button>
           </div>
         </div>
       </section>
@@ -402,7 +413,7 @@
             <div class="flex justify-between items-start">
                 <div>
                      <h2 class="text-3xl font-bold text-white flex items-center gap-x-3">
-                        <span>Deep Dive: LangGraph (Library)</span>
+                        <span>Deep Dive: LangGraph</span>
                         <i class="info-icon" data-tooltip="Introduced in 2024 by the LangChain team, LangGraph is a low-level framework for building stateful, long-running, and durable AI agents using a graph-based structure.">i</i>
                     </h2>
                 </div>
@@ -451,7 +462,7 @@
             <div class="flex justify-between items-start">
                 <div>
                      <h2 class="text-3xl font-bold text-white flex items-center gap-x-3">
-                        <span>Deep Dive: Flowise (Community)</span>
+                        <span>Deep Dive: Flowise</span>
                         <i class="info-icon" data-tooltip="Founded in 2023, Flowise is an open-source, low-code platform with visual builders for creating AI agents and workflows. Acquired by Workday in 2025.">i</i>
                     </h2>
                 </div>
@@ -494,89 +505,98 @@
         </div>
       </section>
 
-      <!-- Slide 7: Activepieces & n8n -->
+      <!-- Slide 7: Activepieces -->
       <section class="slide">
         <div class="card">
-            <h2 class="text-3xl font-bold text-white">Deep Dive: Activepieces & n8n (Community)</h2>
-            <p class="text-gray-400 mt-1">Automation platforms with strong enterprise-grade paid tiers.</p>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
+            <div class="flex justify-between items-start">
                 <div>
-                    <h3 class="text-xl font-semibold text-sky-400 flex items-center gap-x-2 flex-wrap">
-                        Activepieces
-                        <i class="info-icon" data-tooltip="Founded in 2022, Activepieces is an open-source, no-code business automation platform combining AI capabilities with workflow automation. Led by its founding team.">i</i>
-                        <span class="text-sm pill bg-yellow-900/50 text-yellow-300 border-yellow-500/30">★ 17.8k</span>
-                        <a href="https://www.activepieces.com/" target="_blank" class="text-sm pill">Site</a>
-                        <a href="https://www.activepieces.com/docs/developers/overview" target="_blank" class="text-sm pill">API</a>
-                    </h3>
-                    <ul class="list-disc list-outside ml-5 mt-2 space-y-1 text-gray-300">
-                        <li><strong>License:</strong> MIT core, but dual-license for enterprise features.</li>
-                        <li><strong>Auth:</strong> Single-user only in community edition. RBAC/SSO are paid.</li>
-                        <li><strong>Performance:</strong> Node.js + queue engine (~95 flows/sec). Scales linearly.</li>
-                        <li><strong>Key Trait:</strong> Strong enterprise governance features in paid versions.</li>
-                    </ul>
+                     <h2 class="text-3xl font-bold text-white flex items-center gap-x-3">
+                        <span>Deep Dive: Activepieces</span>
+                     </h2>
                 </div>
-                <div>
-                     <h3 class="text-xl font-semibold text-sky-400 flex items-center gap-x-2 flex-wrap">
-                        n8n
-                        <i class="info-icon" data-tooltip="Launched in 2019 by Jan Oberhauser, n8n is a fair-code workflow automation platform for connecting applications and services with low code.">i</i>
-                        <span class="text-sm pill bg-yellow-900/50 text-yellow-300 border-yellow-500/30">★ 136k</span>
-                        <a href="https://n8n.io/" target="_blank" class="text-sm pill">Site</a>
-                        <a href="https://docs.n8n.io/public-api/" target="_blank" class="text-sm pill">API</a>
-                    </h3>
-                    <ul class="list-disc list-outside ml-5 mt-2 space-y-1 text-gray-300">
-                        <li><strong>License:</strong> "Fair-Code", not OSI-approved. Restricts commercial SaaS resale.</li>
-                        <li><strong>Auth:</strong> Strictly single-user. Enterprise features (RBAC/SSO) are gated.</li>
-                        <li><strong>Performance:</strong> Node.js (~200 ops/sec). Queue mode for scaling.</li>
-                        <li><strong>Key Trait:</strong> Mature automation tool, but restrictive license and feature gating.</li>
-                    </ul>
+                <div class="flex-shrink-0 ml-4 flex gap-x-2">
+                    <i class="info-icon" data-tooltip="Founded in 2022, Activepieces is an open-source, no-code business automation platform combining AI capabilities with workflow automation. Led by its founding team.">i</i>
+                    <span class="pill bg-yellow-900/50 text-yellow-300 border-yellow-500/30">★ 17.8k</span>
+                    <a href="https://www.activepieces.com/" target="_blank" class="pill">Official Site</a>
+                    <a href="https://www.activepieces.com/docs/developers/overview" target="_blank" class="pill">API Docs</a>
                 </div>
             </div>
+             <table class="table">
+                <thead><tr><th>Dimension</th><th>Rating</th><th>Notes (Community Edition)</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td>Auth</td>
+                        <td class="stars">★☆☆☆☆</td>
+                        <td class="text-gray-300">Single-user only. No RBAC, SSO, or audit logs. Team/collaboration are enterprise features.</td>
+                    </tr>
+                    <tr>
+                        <td>Cost</td>
+                        <td class="stars">★★★★☆</td>
+                        <td class="text-gray-300">MIT core license. Free to self-host with unlimited flows/tasks. Enterprise features are commercial.</td>
+                    </tr>
+                    <tr>
+                        <td>Performance</td>
+                        <td class="stars">★★★★☆</td>
+                        <td class="text-gray-300">Node.js + queue engine (~95 flows/sec). Scales linearly with workers. Degrades >1000 concurrent flows.</td>
+                    </tr>
+                    <tr>
+                        <td>CI/Env Migrations</td>
+                        <td class="stars">★★★☆☆</td>
+                        <td class="text-gray-300">API exists for execution, but team/collaboration env features are only in enterprise.</td>
+                    </tr>
+                    <tr>
+                        <td>Local Dev</td>
+                        <td class="stars">★★★★☆</td>
+                        <td class="text-gray-300">Can run easily with Docker. Good for building/testing custom "pieces".</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
       </section>
 
-      <!-- Slide 8: Concurrency & Performance -->
-       <section class="slide">
+      <!-- Slide 8: n8n -->
+      <section class="slide">
         <div class="card">
-            <h2 class="text-3xl font-bold text-white">Concurrency & Performance Summary</h2>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Technology</th>
-                        <th>Tech Stack</th>
-                        <th>Concurrency Model</th>
-                        <th>Scaling Notes</th>
-                    </tr>
-                </thead>
+            <div class="flex justify-between items-start">
+                <div>
+                     <h2 class="text-3xl font-bold text-white flex items-center gap-x-3">
+                        <span>Deep Dive: n8n</span>
+                     </h2>
+                </div>
+                <div class="flex-shrink-0 ml-4 flex gap-x-2">
+                    <i class="info-icon" data-tooltip="Launched in 2019 by Jan Oberhauser, n8n is a fair-code workflow automation platform for connecting applications and services with low code.">i</i>
+                    <span class="pill bg-yellow-900/50 text-yellow-300 border-yellow-500/30">★ 136k</span>
+                    <a href="https://n8n.io/" target="_blank" class="pill">Site</a>
+                    <a href="https://docs.n8n.io/public-api/" target="_blank" class="pill">API</a>
+                </div>
+            </div>
+             <table class="table">
+                <thead><tr><th>Dimension</th><th>Rating</th><th>Notes (Community Edition)</th></tr></thead>
                 <tbody>
                     <tr>
-                        <td><strong>LangFlow</strong></td>
-                        <td class="text-gray-400">Python (FastAPI)</td>
-                        <td class="text-gray-400">Limited; struggles with heavy parallel loads.</td>
-                        <td class="text-gray-400">Scales horizontally, but single container throughput is lower than Node.js tools.</td>
+                        <td>Auth</td>
+                        <td class="stars">★☆☆☆☆</td>
+                        <td class="text-gray-300">Strictly single-user. No RBAC, SSO, or LDAP. Many governance features are gated.</td>
                     </tr>
                     <tr>
-                        <td><strong>LangGraph</strong></td>
-                        <td class="text-gray-400">Python/JS Library</td>
-                        <td class="text-gray-400">High (deployment-dependent). Supports async tasks, retries.</td>
-                        <td class="text-gray-400">Production-ready; scaling via worker clustering or async task queues.</td>
+                        <td>Cost</td>
+                        <td class="stars">★★★☆☆</td>
+                        <td class="text-gray-300">Free to self-host, but "Fair-Code" license (not OSI) restricts SaaS resale.</td>
                     </tr>
                     <tr>
-                        <td><strong>Flowise</strong></td>
-                        <td class="text-gray-400">Node.js (Express)</td>
-                        <td class="text-gray-400">High; async event loop handles many requests.</td>
-                        <td class="text-gray-400">Scales horizontally with multiple containers. Outperforms LangFlow at high concurrency.</td>
+                        <td>Performance</td>
+                        <td class="stars">★★★★☆</td>
+                        <td class="text-gray-300">Node.js. ~200 ops/sec benchmark. Parallel workflows supported. Queue mode for scaling.</td>
                     </tr>
                     <tr>
-                        <td><strong>Activepieces</strong></td>
-                        <td class="text-gray-400">Node.js + BullMQ</td>
-                        <td class="text-gray-400">High (~95 flows/sec benchmark). Degrades >1000 concurrent flows.</td>
-                        <td class="text-gray-400">Scales linearly by adding worker containers pulling from Redis. Queue-based.</td>
+                        <td>CI/Env Migrations</td>
+                        <td class="stars">★☆☆☆☆</td>
+                        <td class="text-gray-300">Very limited API in OSS. No version control or multi-env support.</td>
                     </tr>
                     <tr>
-                        <td><strong>n8n</strong></td>
-                        <td class="text-gray-400">Node.js</td>
-                        <td class="text-gray-400">High (~200 ops/sec benchmark).</td>
-                        <td class="text-gray-400">Queue mode + Redis workers for horizontal scaling (enterprise feature).</td>
+                        <td>Local Dev</td>
+                        <td class="stars">★★★★☆</td>
+                        <td class="text-gray-300">Easy local dev via Docker. Good for personal use/testing.</td>
                     </tr>
                 </tbody>
             </table>
@@ -647,6 +667,7 @@
 
     <div class="nav" aria-hidden="false">
       <button id="prev" aria-label="Previous slide">◀︎ Prev</button>
+      <button id="home" aria-label="Go to the first slide">Home</button>
       <button id="next" aria-label="Next slide">Next ▶︎</button>
     </div>
     <div class="progress-container"><div class="progress-bar" id="bar"></div></div>
@@ -662,6 +683,7 @@
       const bar = document.getElementById('bar');
       const prev = document.getElementById('prev');
       const next = document.getElementById('next');
+      const home = document.getElementById('home');
       const totalSlides = slides.length;
 
       function getCurrentIndex() {
@@ -679,8 +701,8 @@
         const progress = ((currentIndex + 1) / totalSlides) * 100;
         if (bar) bar.style.width = progress + '%';
         if (prev) prev.disabled = currentIndex === 0;
+        if (home) home.disabled = currentIndex === 0;
         if (next) next.disabled = currentIndex === totalSlides - 1;
-        // history.replaceState(null, '', '#' + (currentIndex + 1)); // Removed to prevent security error
       }
 
       let scrollTimer;
@@ -690,6 +712,7 @@
       }, { passive: true });
 
       if (prev) prev.addEventListener('click', () => goToSlide(getCurrentIndex() - 1));
+      if (home) home.addEventListener('click', () => goToSlide(0));
       if (next) next.addEventListener('click', () => goToSlide(getCurrentIndex() + 1));
       
       document.addEventListener('keydown', (e) => {
@@ -702,10 +725,14 @@
           e.preventDefault();
           goToSlide(currentIndex - 1);
         }
+        if (e.key === 'Home') {
+          e.preventDefault();
+          goToSlide(0);
+        }
       });
 
       function initialize() {
-          const initialIndex = 0; // Always start at the first slide.
+          const initialIndex = 0;
           setTimeout(() => {
               scroller.scrollTo({ left: initialIndex * scroller.clientWidth, behavior: 'auto' });
               updateUI(initialIndex);
@@ -725,11 +752,8 @@
             const detailsRow = button.closest('tr').nextElementSibling;
             const isExpanded = button.getAttribute('aria-expanded') === 'true';
 
-            // Close all other rows first
             summaryTable.querySelectorAll('.details-row').forEach(row => {
-              if (row !== detailsRow) {
-                row.classList.add('hidden');
-              }
+              if (row !== detailsRow) row.classList.add('hidden');
             });
             toggles.forEach(btn => {
               if (btn !== button) {
@@ -739,7 +763,6 @@
               }
             });
 
-            // Toggle the clicked row
             detailsRow.classList.toggle('hidden');
             button.setAttribute('aria-expanded', !isExpanded);
             button.classList.toggle('expanded');
@@ -747,6 +770,25 @@
           });
         });
       }
+      
+      // Navigation from title slide pills
+      const titlePillsContainer = document.getElementById('title-slide-pills');
+      if (titlePillsContainer) {
+          titlePillsContainer.addEventListener('click', (e) => {
+              if (e.target.matches('button.pill')) {
+                  const toolName = e.target.textContent.trim();
+                  // A bit fuzzy matching to handle "LangGraph (Library)"
+                  const targetIndex = slides.findIndex(slide => {
+                      const h2 = slide.querySelector('h2');
+                      return h2 && h2.textContent.includes(toolName);
+                  });
+                  if (targetIndex > -1) {
+                      goToSlide(targetIndex);
+                  }
+              }
+          });
+      }
+
     })();
   </script>
 </body>
