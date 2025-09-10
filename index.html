@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -17,6 +16,7 @@
       --card-border: #30363d;
       --shadow: rgba(0,0,0,.35);
       --tooltip-bg: #2d333b;
+      --details-bg: rgba(45, 51, 59, 0.3);
     }
     html, body { height: 100%; }
     body { 
@@ -72,8 +72,8 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
-    .table tr:last-child td {
-      border-bottom: none;
+    .table tr.summary-row:last-of-type td {
+       border-bottom: none;
     }
     .stars {
       color: #f0c419;
@@ -138,6 +138,35 @@
         pointer-events: none;
         opacity: 1;
     }
+    .toggle-details {
+      background: none;
+      border: 1px solid var(--card-border);
+      color: var(--muted);
+      width: 24px;
+      height: 24px;
+      font-size: 1.2rem;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+    .toggle-details:hover {
+        background-color: rgba(255,255,255,0.1);
+    }
+    .toggle-details.expanded {
+        transform: rotate(45deg);
+    }
+    .details-row td {
+      padding: 0;
+      border-bottom: 1px solid var(--card-border);
+    }
+    .details-content {
+      background-color: var(--details-bg);
+      padding: 1.5rem 1.5rem 1.5rem 2.5rem; /* Extra left padding */
+    }
   </style>
 </head>
 <body>
@@ -192,11 +221,12 @@
       <section class="slide">
         <div class="card">
           <h2 class="text-3xl font-bold text-white">2. Comparative Overview</h2>
-          <p class="text-gray-400 mt-1">A high-level look at the community editions of each candidate across key criteria.</p>
+          <p class="text-gray-400 mt-1">A high-level look at the community editions. Click <span class="font-bold text-sky-400">+</span> for details.</p>
           <div class="overflow-x-auto">
-            <table class="table mt-4 w-full">
+            <table class="table mt-4 w-full" id="summary-table">
               <thead>
                 <tr>
+                  <th class="w-12"></th>
                   <th>Technology</th>
                   <th>GitHub Stars</th>
                   <th>Auth & Gov</th>
@@ -206,7 +236,8 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
+                <tr class="summary-row">
+                  <td><button class="toggle-details" aria-expanded="false">+</button></td>
                   <td class="font-semibold text-white">LangFlow</td>
                   <td><div class="font-semibold text-yellow-400">115k ★</div></td>
                   <td><div class="stars">★★☆☆☆</div><p class="text-sm text-gray-400 mt-1">Proxy-based auth</p></td>
@@ -214,7 +245,20 @@
                   <td><div class="stars">★★★☆☆</div><p class="text-sm text-gray-400 mt-1">Python, struggles parallel</p></td>
                   <td><div class="stars">★★★★☆</div><p class="text-sm text-gray-400 mt-1">Great CI/CD & Local Dev</p></td>
                 </tr>
-                <tr>
+                <tr class="details-row hidden">
+                    <td colspan="7">
+                        <div class="details-content">
+                            <h4 class="font-semibold text-lg text-white">LangFlow Summary</h4>
+                            <p class="text-gray-400 text-sm mb-3">A visual drag-and-drop platform for building AI agents and RAG workflows.</p>
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div><strong class="text-green-400">Strengths:</strong><ul class="list-disc ml-5 mt-1 text-gray-300"><li>Permissive MIT license with no feature gates.</li><li>Excellent for local dev and rapid prototyping.</li><li>Flows export to JSON, ideal for CI/CD.</li></ul></div>
+                                <div><strong class="text-red-400">Considerations:</strong><ul class="list-disc ml-5 mt-1 text-gray-300"><li>No built-in multi-user, RBAC, or SSO.</li><li>Lower throughput vs. Node.js tools.</li></ul></div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="summary-row">
+                  <td><button class="toggle-details" aria-expanded="false">+</button></td>
                   <td class="font-semibold text-white">LangGraph</td>
                   <td><div class="font-semibold text-yellow-400">18.4k ★</div></td>
                   <td><div class="stars">☆☆☆☆☆</div><p class="text-sm text-gray-400 mt-1">BYO Auth (Library)</p></td>
@@ -222,7 +266,20 @@
                   <td><div class="stars">★★★★☆</div><p class="text-sm text-gray-400 mt-1">Infra-dependent, for agents</p></td>
                   <td><div class="stars">★★★★☆</div><p class="text-sm text-gray-400 mt-1">Code-first CI/CD, DevOps heavy</p></td>
                 </tr>
-                <tr>
+                <tr class="details-row hidden">
+                    <td colspan="7">
+                        <div class="details-content">
+                            <h4 class="font-semibold text-lg text-white">LangGraph Summary</h4>
+                            <p class="text-gray-400 text-sm mb-3">A library for building stateful, multi-agent applications with durable execution.</p>
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div><strong class="text-green-400">Strengths:</strong><ul class="list-disc ml-5 mt-1 text-gray-300"><li>Designed for complex, long-running agents.</li><li>Code-first approach is perfect for CI/CD.</li><li>High performance when deployed correctly.</li></ul></div>
+                                <div><strong class="text-red-400">Considerations:</strong><ul class="list-disc ml-5 mt-1 text-gray-300"><li>It's a library, not a platform; requires heavy DevOps.</li><li>Auth must be implemented by the developer.</li></ul></div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="summary-row">
+                  <td><button class="toggle-details" aria-expanded="false">+</button></td>
                   <td class="font-semibold text-white">Flowise</td>
                   <td><div class="font-semibold text-yellow-400">43.5k ★</div></td>
                   <td><div class="stars">★☆☆☆☆</div><p class="text-sm text-gray-400 mt-1">Single-user OSS</p></td>
@@ -230,7 +287,20 @@
                   <td><div class="stars">★★★★☆</div><p class="text-sm text-gray-400 mt-1">Node.js, high concurrency</p></td>
                   <td><div class="stars">★★★☆☆</div><p class="text-sm text-gray-400 mt-1">Poor CI/CD, great Local Dev</p></td>
                 </tr>
-                <tr>
+                <tr class="details-row hidden">
+                    <td colspan="7">
+                        <div class="details-content">
+                            <h4 class="font-semibold text-lg text-white">Flowise Summary</h4>
+                            <p class="text-gray-400 text-sm mb-3">An open-source low-code platform for visual AI agent and workflow design.</p>
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div><strong class="text-green-400">Strengths:</strong><ul class="list-disc ml-5 mt-1 text-gray-300"><li>Node.js backend provides strong concurrency.</li><li>Permissive Apache 2.0 license.</li><li>Easy to run and develop with locally.</li></ul></div>
+                                <div><strong class="text-red-400">Considerations:</strong><ul class="list-disc ml-5 mt-1 text-gray-300"><li>CI/CD is very limited; no API for workflow creation.</li><li>No built-in auth/governance in OSS version.</li></ul></div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="summary-row">
+                  <td><button class="toggle-details" aria-expanded="false">+</button></td>
                   <td class="font-semibold text-white">Activepieces</td>
                   <td><div class="font-semibold text-yellow-400">17.8k ★</div></td>
                   <td><div class="stars">★☆☆☆☆</div><p class="text-sm text-gray-400 mt-1">Team features paid</p></td>
@@ -238,13 +308,38 @@
                   <td><div class="stars">★★★★☆</div><p class="text-sm text-gray-400 mt-1">Node.js + Queue</p></td>
                   <td><div class="stars">★★★☆☆</div><p class="text-sm text-gray-400 mt-1">API for execution only</p></td>
                 </tr>
-                <tr>
+                 <tr class="details-row hidden">
+                    <td colspan="7">
+                        <div class="details-content">
+                            <h4 class="font-semibold text-lg text-white">Activepieces Summary</h4>
+                            <p class="text-gray-400 text-sm mb-3">An open-source no-code automation platform with a focus on business workflows.</p>
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div><strong class="text-green-400">Strengths:</strong><ul class="list-disc ml-5 mt-1 text-gray-300"><li>Good performance with built-in queue engine.</li><li>Scales linearly by adding workers.</li><li>Strong enterprise features (paid).</li></ul></div>
+                                <div><strong class="text-red-400">Considerations:</strong><ul class="list-disc ml-5 mt-1 text-gray-300"><li>Core is MIT, but many governance features are not.</li><li>Team collaboration is a paid feature.</li></ul></div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="summary-row">
+                  <td><button class="toggle-details" aria-expanded="false">+</button></td>
                   <td class="font-semibold text-white">n8n</td>
                   <td><div class="font-semibold text-yellow-400">136k ★</div></td>
                   <td><div class="stars">★☆☆☆☆</div><p class="text-sm text-gray-400 mt-1">Single-user, features gated</p></td>
                   <td><div class="stars">★★★☆☆</div><p class="text-sm text-gray-400 mt-1">Restrictive Fair-Code</p></td>
                   <td><div class="stars">★★★★☆</div><p class="text-sm text-gray-400 mt-1">Node.js, good benchmark</p></td>
                   <td><div class="stars">★★★☆☆</div><p class="text-sm text-gray-400 mt-1">Limited API in OSS</p></td>
+                </tr>
+                 <tr class="details-row hidden">
+                    <td colspan="7">
+                        <div class="details-content">
+                            <h4 class="font-semibold text-lg text-white">n8n Summary</h4>
+                            <p class="text-gray-400 text-sm mb-3">A fair-code workflow automation platform for connecting applications and services.</p>
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div><strong class="text-green-400">Strengths:</strong><ul class="list-disc ml-5 mt-1 text-gray-300"><li>Mature platform with a large community.</li><li>Good performance benchmarks.</li><li>Strong enterprise offering (paid).</li></ul></div>
+                                <div><strong class="text-red-400">Considerations:</strong><ul class="list-disc ml-5 mt-1 text-gray-300"><li>"Fair-Code" license is not OSI-approved and restricts SaaS resale.</li><li>Many key features are gated behind paid tiers.</li></ul></div>
+                            </div>
+                        </div>
+                    </td>
                 </tr>
               </tbody>
             </table>
@@ -559,6 +654,7 @@
 
   <script>
     (function(){
+      // Slide navigation logic
       const scroller = document.getElementById('slides');
       if (!scroller) return;
 
@@ -570,7 +666,6 @@
 
       function getCurrentIndex() {
         const slideWidth = scroller.clientWidth;
-        // Add a small offset to handle floating point inaccuracies
         return Math.round((scroller.scrollLeft + 1) / slideWidth);
       }
 
@@ -583,28 +678,17 @@
       function updateUI(currentIndex) {
         const progress = ((currentIndex + 1) / totalSlides) * 100;
         if (bar) bar.style.width = progress + '%';
-        
         if (prev) prev.disabled = currentIndex === 0;
         if (next) next.disabled = currentIndex === totalSlides - 1;
-
-        // Update URL hash without adding to history
-        const newUrl = new URL(window.location);
-        newUrl.hash = '#' + (currentIndex + 1);
-        history.replaceState(null, '', newUrl);
+        // history.replaceState(null, '', '#' + (currentIndex + 1)); // Removed to prevent security error
       }
 
-      function handleScroll() {
-        // Use a timeout to debounce scroll events and get the final position
-        let timer;
-        clearTimeout(timer);
-        timer = setTimeout(() => {
-          const currentIndex = getCurrentIndex();
-          updateUI(currentIndex);
-        }, 150);
-      }
+      let scrollTimer;
+      scroller.addEventListener('scroll', () => {
+        clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(() => updateUI(getCurrentIndex()), 150);
+      }, { passive: true });
 
-      // Event Listeners
-      scroller.addEventListener('scroll', handleScroll, { passive: true });
       if (prev) prev.addEventListener('click', () => goToSlide(getCurrentIndex() - 1));
       if (next) next.addEventListener('click', () => goToSlide(getCurrentIndex() + 1));
       
@@ -620,21 +704,49 @@
         }
       });
 
-      // Initial Setup
       function initialize() {
-          const hash = parseInt((location.hash || '').replace('#', ''), 10);
-          const initialIndex = !Number.isNaN(hash) && hash > 0 && hash <= totalSlides ? hash - 1 : 0;
-          
-          // Use setTimeout to ensure the layout is complete before scrolling
+          const initialIndex = 0; // Always start at the first slide.
           setTimeout(() => {
               scroller.scrollTo({ left: initialIndex * scroller.clientWidth, behavior: 'auto' });
               updateUI(initialIndex);
           }, 50);
       }
-
       window.addEventListener('resize', () => goToSlide(getCurrentIndex()));
-
       initialize();
+
+      // Summary table drill-down logic
+      const summaryTable = document.getElementById('summary-table');
+      if (summaryTable) {
+        const toggles = summaryTable.querySelectorAll('.toggle-details');
+        
+        toggles.forEach(toggle => {
+          toggle.addEventListener('click', (e) => {
+            const button = e.currentTarget;
+            const detailsRow = button.closest('tr').nextElementSibling;
+            const isExpanded = button.getAttribute('aria-expanded') === 'true';
+
+            // Close all other rows first
+            summaryTable.querySelectorAll('.details-row').forEach(row => {
+              if (row !== detailsRow) {
+                row.classList.add('hidden');
+              }
+            });
+            toggles.forEach(btn => {
+              if (btn !== button) {
+                btn.setAttribute('aria-expanded', 'false');
+                btn.classList.remove('expanded');
+                btn.innerHTML = '+';
+              }
+            });
+
+            // Toggle the clicked row
+            detailsRow.classList.toggle('hidden');
+            button.setAttribute('aria-expanded', !isExpanded);
+            button.classList.toggle('expanded');
+            button.innerHTML = !isExpanded ? '&minus;' : '+';
+          });
+        });
+      }
     })();
   </script>
 </body>
